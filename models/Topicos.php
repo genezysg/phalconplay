@@ -5,6 +5,7 @@ use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Message;
 use Phalcon\Mvc\Model\Validator\Uniqueness;
 use Phalcon\Mvc\Model\Validator\InclusionIn;
+use Phalcon\Mvc\Model\Validator\StringLength;
 
 class Topicos extends Model
 {
@@ -30,6 +31,15 @@ class Topicos extends Model
                 "field"   => "description",
                 "message" => "The description name must be unique"
             )
+        ));
+
+        $this->validate(new StringLength(
+        array(
+          "field" => 'siglaDisciplina',
+          'max' => 3,
+          'min' => 3,
+          'messageMaximum' => 'We don\'t like really long names',
+          'messageMinimum' => 'We want more than just their initials')
         ));
 
 
