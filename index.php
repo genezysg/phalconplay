@@ -29,6 +29,15 @@ $di->set('db', function(){
     ));
 });
 
+$di->set('dbcoruja', function(){
+    return new PdoMysql(array(
+        "host"      => "localhost",
+        "username"  => "root",
+      //  "password"  => "",
+        "dbname"    => "coruja"
+    ));
+});
+
 $app = new Micro($di);
 
 //define the routes here
@@ -39,10 +48,22 @@ $app->get('/{discipina}/topicos', function($disciplina) {
 
 
 $app->put('/{disciplina}/topicos', function($disciplina) use ($app) {
-  $hue=new Coruja\Models\Topicos();
+  $json=$app->request->getJsonRawBody();
+  $aff= new Coruja\Models\Topicos();
+  foreach($json as $key=>$value){
+      $aff->{$key} = $value;
+  }
+  if ($aff->save() == false){
+    foreach ($aff->getMessages() as $message) {
+            echo $message, "\n";
+        }
+  };
+
+  /*$hue=new Coruja\Models\Topicos();
   $hue->description=$disciplina;
   $hue->siglaDisciplina=$disciplina;
-  $hue->save();
+  */
+
 //  $value=$app->request->getJsonRawBody()
 //  $hue->description=$disciplina;
 //  $hue->save();
